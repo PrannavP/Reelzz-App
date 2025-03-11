@@ -19,6 +19,6 @@ Reelzz is a short video-sharing app similar to TikTok, but with a simplified app
 - 📌 Follow/Unfollow System
 
 ### Stay Connected  
-📧 **Email:** pantaprannav59@gmail.com
-🌐 **Website:** [My Website](https://prannavpanta.com.np/)  
-🐦 **Twitter:** [@prannavlol](https://x.com/prannavlol) 
+- 📧 **Email:** pantaprannav59@gmail.com
+- 🌐 **Website:** [My Website](https://prannavpanta.com.np/)  
+- 🐦 **Twitter:** [@prannavlol](https://x.com/prannavlol)
