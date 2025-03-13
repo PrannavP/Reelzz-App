@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://192.168.1.8:5000";
+const API_BASE_URL = "http://192.168.1.2:5000";
 
 // function to register
-export const registerUser = async(username, email, password) => {
+export const registerUser = async(formdata) => {
     try{
-        const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
-            username: username,
-            email: email,
-            password: password
+        const response = await axios.post(`${API_BASE_URL}/api/auth/register`, formdata, {
+            headers:{
+                "Content-Type": "multipart/form-data"
+            }
         });
         return response.data;
     }catch(err){

@@ -11,30 +11,61 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     StatusBar,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { registerUser } from '../services/auth';
 
 const RegisterScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [profileImage, setProfileImage] = useState(null);
     const [error, setError] = useState("");
 
     const handleRegister = async () => {
-        try{
-            console.log("register btton");
+        try {
+            // console.log("register button");
 
-            console.log(username, email, password);
+            // console.log(username, email, password, profileImage);
 
-            const data = await registerUser(username, email, password);
-            console.log('Registration Successful: ', data);
-            Alert.alert("Success", "registration success");
+            const data = new FormData();
+            data.append('username', username);
+            data.append('email', email);
+            data.append('password', password);
+            // console.log(profileImage.uri);
+            if (profileImage) {
+                data.append('profileImage', {
+                    uri: profileImage.uri,
+                    type: 'image/jpeg',
+                    name: 'profile.jpg'
+                });
+            }
+
+            const response = await registerUser(data);
+
+            // console.log('Registration Successful: ', response);
+            
+            Alert.alert("Success", "Registration success");
             // Navigate to Home screen after successful registration
             navigation.replace('Login');
-        }catch(err){
-            setError("something went wrong!");
-            console.log(error);
+        } catch (err) {
+            setError("Something went wrong!");
+            console.log(err);
+        }
+    };
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setProfileImage(result.assets[0]);
         }
     };
 
@@ -47,8 +78,21 @@ const RegisterScreen = ({ navigation }) => {
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.inner}>
-                        <Text style={styles.title}>Register</Text>
-                        
+                        <Image
+                            source={require("../../assets/Reelzz-Icon.png")}
+                            style={styles.logo}
+                        />
+
+                        <Text style={styles.title}>Create an account</Text>
+
+                        <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
+                            {profileImage ? (
+                                <Image source={{ uri: profileImage.uri }} style={styles.profileImage} />
+                            ) : (
+                                <Text style={styles.imagePickerText}>Pick a profile image</Text>
+                            )}
+                        </TouchableOpacity>
+
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
@@ -57,7 +101,7 @@ const RegisterScreen = ({ navigation }) => {
                                 onChangeText={setUsername}
                                 autoCapitalize="none"
                             />
-                            
+
                             <TextInput
                                 style={styles.input}
                                 placeholder="Email"
@@ -66,7 +110,7 @@ const RegisterScreen = ({ navigation }) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
-                            
+
                             <TextInput
                                 style={styles.input}
                                 placeholder="Password"
@@ -75,14 +119,14 @@ const RegisterScreen = ({ navigation }) => {
                                 secureTextEntry
                             />
                         </View>
-                        
+
                         <TouchableOpacity
                             style={styles.button}
                             onPress={handleRegister}
                         >
                             <Text style={styles.buttonText}>Register</Text>
                         </TouchableOpacity>
-                        
+
                         <View style={styles.loginContainer}>
                             <Text style={styles.loginText}>Already have an account? </Text>
                             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -146,6 +190,29 @@ const styles = StyleSheet.create({
     loginLink: {
         color: '#1e90ff',
         fontWeight: 'bold',
+    },
+    logo: {
+        width: 400,
+        height: 150,
+        marginBottom: 10,
+    },
+    imagePicker: {
+        backgroundColor: '#f5f5f5',
+        borderRadius: 50,
+        padding: 15,
+        marginBottom: 20,
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    imagePickerText: {
+        color: '#333',
+    },
+    profileImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
     },
 });
 

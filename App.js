@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from "react-native";
 
 import { UserProvider } from './src/context/UserContext';
 import LoginScreen from './src/screens/LoginScreen';
@@ -10,12 +11,15 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import VideoUploadScreen from './src/screens/VideoUploadScreen';
+import { UserContext } from './src/context/UserContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Bottom tab navigator for Home and Profile screens
 const HomeTabs = () => {
+    const { user } = useContext(UserContext);
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -25,7 +29,23 @@ const HomeTabs = () => {
                     if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Profile') {
-                        iconName = focused ? 'person' : 'person-outline';
+                        if (user && user.user && user.user.userImage) {
+                            return (
+                                <Image
+                                    source={{ uri: user.user.userImage }}
+                                    style={{
+                                        width: size,
+                                        height: size,
+                                        borderRadius: size / 2,
+                                        borderWidth: focused ? 2 : 0,
+                                        borderColor: focused ? '#1e90ff' : 'transparent',
+                                    }}
+                                />
+                            );
+                        } else {
+                            iconName = focused ? 'person' : 'person-outline';
+                            return <Ionicons name={iconName} size={size} color={color} />;
+                        }
                     }else if(route.name === "Video Upload"){
                         iconName = focused ? 'add' : 'add-outline';
                     }

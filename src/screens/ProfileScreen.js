@@ -7,6 +7,7 @@ import {
     SafeAreaView,
     ScrollView,
     StatusBar,
+    Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,7 +15,6 @@ import { UserContext } from '../context/UserContext';
 
 const ProfileScreen = () => {
     const { user } = useContext(UserContext);
-    // console.log(user.user.username);
 
     const navigation = useNavigation();
 
@@ -41,7 +41,10 @@ const ProfileScreen = () => {
                 <View style={styles.profileHeader}>
                     <View style={styles.avatarContainer}>
                         <View style={styles.avatar}>
-                            <Text style={styles.avatarText}>{user.user.username.charAt(0).toUpperCase()}</Text>
+                            <Image
+                                source={{ uri: user.user.userImage }}
+                                style={styles.avatar}
+                            />
                         </View>
                     </View>
                     <Text style={styles.userName}>{user.user.username}</Text>
@@ -105,14 +108,8 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
-        backgroundColor: '#1e90ff',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    avatarText: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        color: '#fff',
     },
     userName: {
         fontSize: 22,

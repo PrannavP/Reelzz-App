@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // API Base URL
-const API_BASE_URL = "http://192.168.1.8:5000";
+const API_BASE_URL = "http://192.168.1.2:5000";
 
 // function to upload video
 export const uploadVideo = async (videoUri, uploadedBy) => {

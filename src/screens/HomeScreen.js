@@ -80,16 +80,22 @@ const HomeScreen = () => {
     // Stop all videos when navigating away
     useFocusEffect(
         useCallback(() => {
+            // Resume the currently visible video when the screen gains focus
+            if(currentVisibleVideo && videoRefs.current[currentVisibleVideo]){
+                videoRefs.current[currentVisibleVideo].playAsync();
+            }
+
             return () => {
+                // Pause all videos when navigating away
                 Object.keys(videoRefs.current).forEach((id) => {
                     if (videoRefs.current[id]) {
                         videoRefs.current[id].pauseAsync();
                     }
                 });
             };
-        }, [])
+        }, [currentVisibleVideo])
     );
-
+    
     const handleLike = async (item) => {
         try {
             const response = await likeVideo(item._id, user.user._id);
@@ -116,7 +122,7 @@ const HomeScreen = () => {
     };
 
     const renderItem = ({ item }) => {
-        const videoUrl = `http://192.168.1.8:5000/uploads/videos/${item.fileName}`;
+        const videoUrl = `http://192.168.1.2:5000/uploads/videos/${item.fileName}`;
 
         return (
             <View style={styles.videoCard}>

@@ -11,7 +11,8 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     StatusBar,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../context/UserContext';
@@ -39,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
             try{
                 await AsyncStorage.setItem("token", data.token);
                 await AsyncStorage.setItem("user", JSON.stringify(data.user));
-                console.log("Login successful, token stored");
+                // console.log("Login successful, token stored");
             }catch(err){
                 console.log("Error storing async storage");
             }
@@ -61,6 +62,12 @@ const LoginScreen = ({ navigation }) => {
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.inner}>
+
+                        <Image
+                            source={require("../../assets/Reelzz-Icon.png")}
+                            style={styles.logo}
+                        />
+
                         <Text style={styles.title}>Login</Text>
                         
                         <View style={styles.inputContainer}>
@@ -152,6 +159,11 @@ const styles = StyleSheet.create({
         color: '#1e90ff',
         fontWeight: 'bold',
     },
+    logo: {
+        width: 400,
+        height: 150,
+        marginBottom: 10,
+    }
 });
 
 export default LoginScreen;
